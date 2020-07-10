@@ -1,20 +1,45 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View ,TouchableOpacity,FlatList } from 'react-native';
+import { StyleSheet, Text, View ,TouchableOpacity,FlatList,AsyncStorage } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Entypo } from '@expo/vector-icons';
 import { Card } from 'native-base';
 export default class HomePage extends Component {
     state={
-        data:[{"todo":"Do GYM","time":"11:00","Date":"12 July"},
-            {"todo":"Do YOGA fgzdgrgrg rgrgrzgz rgrsgg","time":"10:23","Date":"09 July"},
-            {"todo":"Do YOGA  fgzdgrgrg rgrgrzgz rgrsgg","time":"07:56","Date":"19 July"},
-            {"todo":"योग ही भारतातील ","time":"07:56","Date":"19 July"}
-    ]
+        data:[]
     }
     static navigationOptions = {
     title:"ToDo List"
   }
+  componentDidMount(){
+    const { navigation } =this.props;
+    navigation.addListener("willFocus",()=>{
+      this.getAllTodos();
+    })
+  }
+  getAllTodos =async() =>{
+    //collects all data
+    await AsyncStorage.getAllKeys()
+    .then(keys=>{
+      return AsyncStorage.multiGet(keys)
+      .then(
+        result=>{
+          this.setState({
+            data:result
+          })
+        }
+      )
+      .catch(error=>{
+        console.log(error)
+      })
+    })
+    .catch(error =>{
+      console.log(error)
+    })
+
+    ///console.log("******** State data",this.state.data)
+  }
     render() {
+        //console.log("Render State data",this.state.data)
         return (
             <View style={styles.container}>
                 <View style={styles.box1}>
@@ -37,18 +62,27 @@ export default class HomePage extends Component {
                     <FlatList 
                      data={this.state.data}
                      renderItem={( {item} ) => {
+                        // let todo=JSON.parse(item);
+                        let singleTodo=JSON.parse(item[1]);
+                       // console.log("+++++++++++++++++++++ ITEM",item)
                      return (
-                        <TouchableOpacity style={styles.todoItemBox}>
+                        <TouchableOpacity 
+                        style={styles.todoItemBox}
+                        onPress={()=>{
+                          this.props.navigation.navigate("TODOView",{
+                            key:item[0].toString()
+                          })
+                        }} >
                         <Card style={styles.listItem}>
                             <View style={styles.iconContainer}>
-                              <Text style={styles.timeIcon}>{item.time}</Text>   
+                              <Text style={styles.timeIcon}>{singleTodo.time}</Text>   
                             </View> 
                             <View style={styles.infoContainer}>
                               <Text style={styles.infoTextTask}>
-                              {item.todo}
+                              {singleTodo.todo}
                               </Text>
                               <Text style={styles.infoTextDate}>
-                              {item.Date}
+                              {singleTodo.date}
                               </Text>
                             </View>
                             <View style={styles.infoTextIndicator}> 
@@ -65,9 +99,9 @@ export default class HomePage extends Component {
 
                 <TouchableOpacity
       style={styles.floatButton}
-        //  onPress={()=>{
-        //    this.props.navigation.navigate("Add")
-        //  }}
+         onPress={()=>{
+           this.props.navigation.navigate("TODOCreate")
+         }}
       >
         <Entypo
         name="plus"
