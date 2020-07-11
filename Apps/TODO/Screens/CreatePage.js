@@ -11,7 +11,8 @@ export default class AddNewContactScreen extends React.Component {
     date:"",
     desc:"",
     DTPVisibility:false,
-    selectedVal:"Select Date/Time"
+    selectedVal:"Select Date/Time",
+    completed:false,
   }
   static navigationOptions = {
     title:"Add ToDo Task"
@@ -26,7 +27,8 @@ export default class AddNewContactScreen extends React.Component {
         time:this.state.time,
         todo:this.state.todo,
         date:this.state.date,
-        desc:this.state.desc
+        desc:this.state.desc,
+        completed:this.state.completed,
       }
       await AsyncStorage.setItem(Date.now().toString(),
       JSON.stringify(todos)
@@ -43,14 +45,7 @@ export default class AddNewContactScreen extends React.Component {
     else{
       Alert.alert("Please fill the Task !")
     }
-   // console.log("test,",this.state.todo)
   }
-  // setDate=(date)=>{
-  //   this.setState({
-  //     date:date.toString().substring(0, 15)
-  //   })
-
-  // }
   handleConfirm =(date)=>{
      this.setState({
        selectedVal:date.toString(),

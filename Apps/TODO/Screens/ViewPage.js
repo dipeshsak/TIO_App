@@ -8,6 +8,7 @@ export default class ViewPage extends React.Component {
     todo:"",
     date:"",
     desc:"",
+    completed:"",
     key:"DummyKey"
   }
   static navigationOptions = {
@@ -33,6 +34,7 @@ export default class ViewPage extends React.Component {
     .catch(error=>{
       console.log(error)
     })
+    
   }
 
 
@@ -64,6 +66,27 @@ export default class ViewPage extends React.Component {
       ]
     )
   }
+  completedTodoHandler= async key =>{
+    this.setState({
+      completed: !this.state.completed
+    })
+
+    var todoData={
+      completed : !this.state.completed,
+    }
+
+    await AsyncStorage.mergeItem(key,JSON.stringify(todoData))
+      .then(
+        ()=>{
+          //this.props.navigation.goBack()
+        }
+      )
+      .catch(error=>{
+        console.log("errorr in view",error)
+      })
+
+  }
+
   render(){
       console.log("Key",this.state.key)
   return (
@@ -136,6 +159,20 @@ export default class ViewPage extends React.Component {
              color="teal"
            />
            {/* <Text style={styles.actionText}>Edit</Text> */}
+         </TouchableOpacity>
+       </CardItem>
+       
+       <CardItem style={styles.actionButton} bordered>
+         <TouchableOpacity
+            onPress={()=>{
+             this.completedTodoHandler(this.state.key)}
+            }
+         >
+           <Entypo  
+             name="thumbs-up"
+             size={40}
+             color={this.state.completed ? "green":"#DFAF2B"} //#45CE30
+           />
          </TouchableOpacity>
        </CardItem>
 

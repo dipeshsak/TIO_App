@@ -3,7 +3,7 @@ import { StyleSheet, Text, View ,TouchableOpacity,FlatList,AsyncStorage } from '
 import { StatusBar } from 'expo-status-bar';
 import { Entypo } from '@expo/vector-icons';
 import { Card } from 'native-base';
-import { ScrollView } from 'react-native-gesture-handler';
+import _ from 'lodash';
 export default class HomePage extends Component {
     state={
         data:[]
@@ -12,13 +12,16 @@ export default class HomePage extends Component {
     title:"ToDo List"
   }
   componentDidMount(){
+    
     const { navigation } =this.props;
     navigation.addListener("willFocus",()=>{
       this.getAllTodos();
     })
+    
   }
   getAllTodos =async() =>{
     //collects all data
+    
     await AsyncStorage.getAllKeys()
     .then(keys=>{
       return AsyncStorage.multiGet(keys)
@@ -37,7 +40,6 @@ export default class HomePage extends Component {
       console.log(error)
     })
 
-    ///console.log("******** State data",this.state.data)
   }
     render() {
         //console.log("Render State data",this.state.data)
@@ -46,11 +48,11 @@ export default class HomePage extends Component {
                 <View style={styles.box1}>
                     <View style={styles.summaryBox}>
                        <View style={styles.totalTODO}>
-                           <Text style={styles.TODOVal}>11</Text>
+                           <Text style={styles.TODOVal}>{this.state.data.length}</Text>
                            <Text style={styles.TODOText}>Total</Text>
                         </View>
                        <View style={styles.pendingTODO}>
-                           <Text style={styles.TODOValPen}>3</Text>
+                           <Text style={styles.TODOValPen}>2</Text>
                            <Text style={styles.TODOText}>Pending</Text>
                        </View>
                        <View style={styles.doneTODO}>
@@ -86,7 +88,7 @@ export default class HomePage extends Component {
                               {singleTodo.date ? singleTodo.date : <Text style={styles.notSelected}>Date/Time not selected</Text>}
                               </Text>
                             </View>
-                            <View style={styles.infoTextIndicator}> 
+                            <View style={styles.infoTextIndicator} backgroundColor={singleTodo.completed ? "#45CE30":"#DFAF2B"}> 
                             </View> 
                         </Card>
                         </TouchableOpacity>
@@ -211,7 +213,7 @@ const styles = StyleSheet.create({
       },
       infoTextIndicator:{
           width:3,
-          backgroundColor:"#45CE30" //#45CE30 <--green #DFAF2B <--Yelloe
+          //backgroundColor:"#45CE30"//#45CE30 <--green #DFAF2B <--Yellow
       },
     floatButton: {
         borderWidth: 1,
