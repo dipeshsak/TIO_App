@@ -91,7 +91,7 @@ export default class ViewPage extends React.Component {
           </CardItem>
           <CardItem bordered>
              <Text style={styles.infoTextVal}>
-               {this.state.time}
+               {this.state.time ? this.state.time : "  --"}
              </Text>
           </CardItem>
         </Card>
@@ -104,7 +104,7 @@ export default class ViewPage extends React.Component {
           </CardItem>
           <CardItem bordered>
              <Text style={styles.infoTextVal}>
-               {this.state.date}
+               {this.state.date ? this.state.date : "  --"}
              </Text>
           </CardItem>
         </Card>
@@ -117,7 +117,7 @@ export default class ViewPage extends React.Component {
           </CardItem>
           <CardItem bordered>
              <Text style={styles.infoTextVal}>
-               {this.state.desc}
+               {this.state.desc ? this.state.desc :"  --"}
              </Text>
           </CardItem>
         </Card>

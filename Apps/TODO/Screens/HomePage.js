@@ -3,6 +3,7 @@ import { StyleSheet, Text, View ,TouchableOpacity,FlatList,AsyncStorage } from '
 import { StatusBar } from 'expo-status-bar';
 import { Entypo } from '@expo/vector-icons';
 import { Card } from 'native-base';
+import { ScrollView } from 'react-native-gesture-handler';
 export default class HomePage extends Component {
     state={
         data:[]
@@ -49,11 +50,11 @@ export default class HomePage extends Component {
                            <Text style={styles.TODOText}>Total</Text>
                         </View>
                        <View style={styles.pendingTODO}>
-                           <Text style={styles.TODOVal}>3</Text>
+                           <Text style={styles.TODOValPen}>3</Text>
                            <Text style={styles.TODOText}>Pending</Text>
                        </View>
                        <View style={styles.doneTODO}>
-                           <Text style={styles.TODOVal}>8</Text>
+                           <Text style={styles.TODOValComp}>8</Text>
                            <Text style={styles.TODOText}>Completed</Text>
                        </View>
                     </View>
@@ -75,14 +76,14 @@ export default class HomePage extends Component {
                         }} >
                         <Card style={styles.listItem}>
                             <View style={styles.iconContainer}>
-                              <Text style={styles.timeIcon}>{singleTodo.time}</Text>   
+                              <Text style={styles.timeIcon}>{singleTodo.time ? singleTodo.time: <Text >N/A</Text> }</Text>   
                             </View> 
                             <View style={styles.infoContainer}>
                               <Text style={styles.infoTextTask}>
                               {singleTodo.todo}
                               </Text>
                               <Text style={styles.infoTextDate}>
-                              {singleTodo.date}
+                              {singleTodo.date ? singleTodo.date : <Text style={styles.notSelected}>Date/Time not selected</Text>}
                               </Text>
                             </View>
                             <View style={styles.infoTextIndicator}> 
@@ -96,20 +97,21 @@ export default class HomePage extends Component {
                 keyExtractor={(item,index)=>index.toString()}
                 />
                 </View>
-
+                
                 <TouchableOpacity
-      style={styles.floatButton}
-         onPress={()=>{
-           this.props.navigation.navigate("TODOCreate")
-         }}
-      >
-        <Entypo
-        name="plus"
-        size={30}
-        color="#fff"
-        />
-      </TouchableOpacity>
+                       style={styles.floatButton}
+                      onPress={()=>{
+                    this.props.navigation.navigate("TODOCreate")
+                        }}
+                        >
+                    <Entypo
+                        name="plus"
+                        size={30}
+                       color="#fff"
+                         />
+                 </TouchableOpacity>
             </View>
+            
         )
     }
 }
@@ -161,6 +163,16 @@ const styles = StyleSheet.create({
     TODOText:{
         fontWeight:'bold'
     },
+    TODOValPen:{
+      fontSize:25,
+      color:'#DFAF2B',
+      fontWeight:'bold',
+    },
+    TODOValComp:{
+      fontSize:25,
+      color:'#45CE30',
+      fontWeight:'bold',
+    },
     box2:{
         flex:1,
         backgroundColor: 'white',
@@ -199,7 +211,7 @@ const styles = StyleSheet.create({
       },
       infoTextIndicator:{
           width:3,
-          backgroundColor:"green"
+          backgroundColor:"#45CE30" //#45CE30 <--green #DFAF2B <--Yelloe
       },
     floatButton: {
         borderWidth: 1,
@@ -213,6 +225,9 @@ const styles = StyleSheet.create({
         height: 55,
         backgroundColor: "teal",
         borderRadius: 100
+      },
+      notSelected:{
+        color:'red'
       }
   });
 

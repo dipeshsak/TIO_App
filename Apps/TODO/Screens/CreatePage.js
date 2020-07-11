@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View,Keyboard,AsyncStorage,Alert,TouchableWithoutFeedback,ScrollView } from 'react-native';
+import { StyleSheet, Text, View,Keyboard,AsyncStorage,Alert,TouchableWithoutFeedback,TouchableOpacity,ScrollView } from 'react-native';
 import { Form, Item,Input,Label,Button } from 'native-base'
-import {DatePicker} from 'react-native-propel-kit';
+
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 export default class AddNewContactScreen extends React.Component {
   state={
@@ -9,7 +10,8 @@ export default class AddNewContactScreen extends React.Component {
     todo:"",
     date:"",
     desc:"",
-    selDate:new Date(),
+    DTPVisibility:false,
+    selectedVal:"Select Date/Time"
   }
   static navigationOptions = {
     title:"Add ToDo Task"
@@ -17,7 +19,6 @@ export default class AddNewContactScreen extends React.Component {
 
   saveToDo = async() =>{
     if(
-      this.state.time !== ""&&
       this.state.todo !== ""
     ){
       //create Todo object
@@ -40,15 +41,30 @@ export default class AddNewContactScreen extends React.Component {
       })
     }
     else{
-      Alert.alert("All Feilds are required ! ")
+      Alert.alert("Please fill the Task !")
     }
    // console.log("test,",this.state.todo)
   }
-  setDate=(date)=>{
-    this.setState({
-      date:date.toString().substring(0, 15)
-    })
+  // setDate=(date)=>{
+  //   this.setState({
+  //     date:date.toString().substring(0, 15)
+  //   })
 
+  // }
+  handleConfirm =(date)=>{
+     this.setState({
+       selectedVal:date.toString(),
+       DTPVisibility:false,
+       date:date.toString().substring(0,15),
+       time:date.toString().substring(16,21)
+     })
+  }
+
+  onPressCancel=()=>{
+    this.setState({DTPVisibility:false})
+  }
+  onPressButton=()=>{
+    this.setState({DTPVisibility:true})
   }
   render(){
   return (
@@ -69,25 +85,23 @@ export default class AddNewContactScreen extends React.Component {
            autoCorrect={false}
            autoCapitalize="none"
            keyboardType="default"
-           placeholder="Do Gym"
+           placeholder="Eg. Do Gym"
            onChangeText={todo=>this.setState({todo})}
           />
         </Item>
         <Item style={styles.inputItem}>
-          <Label style={styles.labelStyle}>Date : </Label>
-          <DatePicker style={styles.datePickstyle}  
-          placeholder="03/01/2020"
-          color='grey'
-           onChange={this.setDate} />
-        </Item>
-        <Item style={styles.inputItem}>
-          <Label style={styles.labelStyle}>Time : </Label>
-          <Input 
-           autoCorrect={false}
-           autoCapitalize="none"
-           keyboardType="default"
-           placeholder="12:00 (24 hr Time)"
-           onChangeText={time=>this.setState({time})}
+          <Label style={styles.labelStyle}>Date/Time : </Label>
+            <TouchableOpacity
+            style={styles.touchanleOpastyle}
+            onPress={this.onPressButton}
+            >
+            <Text style={styles.touchanleOpaText}>{this.state.selectedVal.toString().substring(0,21)}</Text>
+            </TouchableOpacity>
+          <DateTimePickerModal 
+            isVisible={this.state.DTPVisibility}
+            onConfirm={this.handleConfirm}
+            onCancel={this.onPressCancel}
+            mode="datetime"
           />
         </Item>
         <Item style={styles.inputItem}>
@@ -101,6 +115,7 @@ export default class AddNewContactScreen extends React.Component {
           />
         </Item>  
       </Form>
+        {/* <Text>Selected Date/Time : {this.state.selectedVal}</Text> */}
       <Button 
       style={styles.button}
       full
@@ -156,5 +171,14 @@ const styles = StyleSheet.create({
     color:"black",
     fontWeight:'bold'
     //laceholderTextColor:"blue"
+  },
+  touchanleOpastyle:{
+    width:200,
+    height:45,
+  },
+  touchanleOpaText:{
+    fontSize:18,
+    top:10,
+    color:'teal'
   }
 });

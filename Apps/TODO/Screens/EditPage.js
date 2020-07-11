@@ -1,14 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View , TouchableOpacity, Keyboard,AsyncStorage,Alert,TouchableWithoutFeedback,ScrollView} from 'react-native';
 import {Form , Item , Input, Label,Button} from 'native-base'
-import {DatePicker} from 'react-native-propel-kit';
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 export default class EditContactScreen extends React.Component {
   state={
     time:"",
     todo:"",
     date:"",
-    key:"" 
+    DTPVisibility:false,
+    selectedVal:"Select Date/Time",
+    key:"",
+
   }
   static navigationOptions = {
     title:" Edit Todo"
@@ -39,9 +42,7 @@ export default class EditContactScreen extends React.Component {
 
   updateTodo = async key =>{
     if(
-      this.state.todo !== ""&&
-      this.state.time !== ""&&
-      this.state.date !== ""
+      this.state.todo !== ""
     ){
       var todoData={
         todo:this.state.todo,
@@ -60,13 +61,22 @@ export default class EditContactScreen extends React.Component {
       })
     }
   }
-
-  setDate=(date)=>{
+  
+  handleConfirm =(date)=>{
     this.setState({
-      date:date.toString().substring(0, 15)
+      selectedVal:date.toString(),
+      DTPVisibility:false,
+      date:date.toString().substring(0,15),
+      time:date.toString().substring(16,21)
     })
+ }
 
-  }
+ onPressCancel=()=>{
+   this.setState({DTPVisibility:false})
+ }
+ onPressButton=()=>{
+   this.setState({DTPVisibility:true})
+ }
   render(){
   return (
     <TouchableWithoutFeedback
@@ -92,23 +102,6 @@ export default class EditContactScreen extends React.Component {
               }
             />
         </Item>
-        <Item style={styles.inputItem}>
-          <Label style={styles.labelStyle}>Time : </Label>
-            <Input
-              // style={styles.inputStyle}
-              autoCorrect={false}
-              autoCapitalize="none"
-              keyboardType="default"
-              onChangeText={
-                time=>this.setState({
-                  time
-                })
-              }
-              value={
-                this.state.time
-              }
-            />
-        </Item>
         {/* <Item style={styles.inputItem}>
           <Label>Date : </Label>
             <Input
@@ -127,11 +120,20 @@ export default class EditContactScreen extends React.Component {
             
         </Item> */}
         <Item style={styles.inputItem}>
-          <Label style={styles.labelStyle}>Date : </Label>
-          <DatePicker style={styles.datePickstyle}  
-           placeholder={this.state.date} 
-           color="black"
-           onChange={this.setDate} />
+          <Label style={styles.labelStyle}>Date/Time : </Label>
+          <TouchableOpacity
+            style={styles.touchanleOpastyle}
+            onPress={this.onPressButton}
+            >
+            <Text style={styles.touchanleOpaText}>{this.state.selectedVal.toString().substring(0,21)}</Text>
+            </TouchableOpacity>
+          <DateTimePickerModal 
+            isVisible={this.state.DTPVisibility}
+            onConfirm={this.handleConfirm}
+            onCancel={this.onPressCancel}
+            mode="datetime"
+          />
+          
         </Item>
         <Item style={styles.inputItem}>
           <Label style={styles.labelStyle}>Description  : </Label>
@@ -195,5 +197,14 @@ const styles = StyleSheet.create({
     color:"black",
     fontWeight:'bold'
     //laceholderTextColor:"blue"
+  },
+  touchanleOpastyle:{
+    width:200,
+    height:45,
+  },
+  touchanleOpaText:{
+    fontSize:18,
+    top:10,
+    color:'teal'
   }
 });
