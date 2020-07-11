@@ -3,7 +3,6 @@ import { StyleSheet, Text, View ,TouchableOpacity,FlatList,AsyncStorage } from '
 import { StatusBar } from 'expo-status-bar';
 import { Entypo } from '@expo/vector-icons';
 import { Card } from 'native-base';
-import _ from 'lodash';
 export default class HomePage extends Component {
     state={
         data:[]
