@@ -1,11 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,StatusBar } from 'react-native';
+
 import NavigationRoute from "./NavigationRoute";
 
 export default function App() {
   return (
+    <View style={styles.container}>
+       <StatusBar barStyle="default" hidden={false} backgroundColor="#00a08c" translucent={false}/>
        <NavigationRoute style={styles.container}/>
+      </View>
   );
 }
 
