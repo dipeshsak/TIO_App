@@ -34,6 +34,9 @@ export default class EditContactScreen extends React.Component {
       todoData["key"]=key
       //set state
       this.setState(todoData)
+      this.setState({
+        selectedVal:this.state.date +" "+this.state.time
+      })
     })
     .catch(error=>{
       console.log(error)
@@ -125,7 +128,7 @@ export default class EditContactScreen extends React.Component {
             style={styles.touchanleOpastyle}
             onPress={this.onPressButton}
             >
-            <Text style={styles.touchanleOpaText}>{this.state.selectedVal.toString().substring(0,21)}</Text>
+            <Text style={styles.touchanleOpaText}>{this.state.date ? this.state.selectedVal.toString().substring(0,21):"Select Date/Time"}</Text>
             </TouchableOpacity>
           <DateTimePickerModal 
             isVisible={this.state.DTPVisibility}
@@ -139,6 +142,7 @@ export default class EditContactScreen extends React.Component {
           <Label style={styles.labelStyle}>Description  : </Label>
             <Input
             // style={styles.inputStyle}
+            placeholder="Add Description here"
               autoCorrect={false}
               autoCapitalize="none"
               keyboardType="default"
@@ -199,7 +203,7 @@ const styles = StyleSheet.create({
     //laceholderTextColor:"blue"
   },
   touchanleOpastyle:{
-    width:200,
+    width:"100%",
     height:45,
   },
   touchanleOpaText:{

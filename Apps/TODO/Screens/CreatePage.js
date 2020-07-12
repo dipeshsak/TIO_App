@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     //laceholderTextColor:"blue"
   },
   touchanleOpastyle:{
-    width:200,
+    width:"100%",
     height:45,
   },
   touchanleOpaText:{

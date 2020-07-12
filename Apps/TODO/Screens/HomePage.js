@@ -5,7 +5,9 @@ import { Entypo } from '@expo/vector-icons';
 import { Card } from 'native-base';
 export default class HomePage extends Component {
     state={
-        data:[]
+        data:[],
+        pendingTodosCount:0,
+        completedTodosCount:0
     }
     static navigationOptions = {
     title:"ToDo List"
@@ -16,6 +18,7 @@ export default class HomePage extends Component {
     navigation.addListener("willFocus",()=>{
       this.getAllTodos();
     })
+    //this.getPendingTodos();
     
   }
   getAllTodos =async() =>{
@@ -39,9 +42,38 @@ export default class HomePage extends Component {
       console.log(error)
     })
 
+    this.getPendingTodos()
+  }
+   //count=[];
+  getPendingTodos=()=>{
+  //   console.log("Data Coming",com)
+  //  if(com === true){
+  //   this.count.push(com)
+  //  }
+  //  console.log("Count",this.count)
+
+  // // this.count=[]
+  let pendingCount=0;
+  for(let i=0;i<=this.state.data.length-1;i++){
+    
+    //console.log("Looopped***************",i)
+  //console.log("Full Data***********************",JSON.parse(this.state.data[i][1]).completed)
+  let val=JSON.parse(this.state.data[i][1]).completed;
+     if(val === false){
+      // console.log("Valll true *******",val)
+       pendingCount= pendingCount+1;
+     }
+     
+  }
+ // console.log("Pending to do count***********",pendingCount)
+  this.setState({
+    pendingTodosCount:pendingCount,
+    completedTodosCount:this.state.data.length - pendingCount
+  })
+
   }
     render() {
-        //console.log("Render State data",this.state.data)
+        
         return (
             <View style={styles.container}>
                 <View style={styles.box1}>
@@ -51,15 +83,16 @@ export default class HomePage extends Component {
                            <Text style={styles.TODOText}>Total</Text>
                         </View>
                        <View style={styles.pendingTODO}>
-                           <Text style={styles.TODOValPen}>2</Text>
+                           <Text style={styles.TODOValPen}>{this.state.pendingTodosCount}</Text>
                            <Text style={styles.TODOText}>Pending</Text>
                        </View>
                        <View style={styles.doneTODO}>
-                           <Text style={styles.TODOValComp}>8</Text>
+                           <Text style={styles.TODOValComp}>{this.state.completedTodosCount}</Text>
                            <Text style={styles.TODOText}>Completed</Text>
                        </View>
                     </View>
                 </View>
+               {this.state.data.length >=1 ?
                 <View style={styles.box2}>
                     <FlatList 
                      data={this.state.data}
@@ -88,6 +121,7 @@ export default class HomePage extends Component {
                               </Text>
                             </View>
                             <View style={styles.infoTextIndicator} backgroundColor={singleTodo.completed ? "#45CE30":"#DFAF2B"}> 
+                               {/* {this.getPendingTodos(singleTodo.completed)} */}
                             </View> 
                         </Card>
                         </TouchableOpacity>
@@ -98,7 +132,7 @@ export default class HomePage extends Component {
                 keyExtractor={(item,index)=>index.toString()}
                 />
                 </View>
-                
+                 : <View style={styles.noTodoFoundView}><Text style={styles.noTodoFound}>No Todos found!</Text></View> }        
                 <TouchableOpacity
                        style={styles.floatButton}
                       onPress={()=>{
@@ -229,6 +263,16 @@ const styles = StyleSheet.create({
       },
       notSelected:{
         color:'red'
+      },
+      noTodoFound:{
+        fontSize:25,
+        color:"teal"
+      },
+      noTodoFoundView:{
+        flex:1,
+        alignItems:'center',
+        justifyContent:'center',
+        //backgroundColor:'grey'
       }
   });
 

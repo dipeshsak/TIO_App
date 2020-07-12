@@ -79,6 +79,7 @@ export default class ViewPage extends React.Component {
       .then(
         ()=>{
           //this.props.navigation.goBack()
+          console.log("Gotcha!")
         }
       )
       .catch(error=>{
