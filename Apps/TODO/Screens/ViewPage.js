@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View,ScrollView,TouchableOpacity,Linking,Platform,Alert,AsyncStorage,TouchableWithoutFeedback } from 'react-native';
 import { Form, Item,Input,Label,Button,Card,CardItem} from 'native-base'
-import { Entypo } from "@expo/vector-icons"
+import { Entypo } from "react-native-vector-icons"
 export default class ViewPage extends React.Component {
   state={
     time:"",
